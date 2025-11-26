@@ -1,0 +1,20 @@
+ /* --- FOOTER --- */
+.footer {
+          background-color: #1a1a1a;
+          color: white;
+          padding: 1.5rem 0;
+          margin-top: auto;
+        }
+
+.footer-links {
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+          font-weight: 500;
+        }
+
+.footer-link {
+          color: white;
+          text-decoration: none;
+        }
+.footer-link:hover { color: #d1d5db; }
