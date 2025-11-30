@@ -1,9 +1,9 @@
 //Sign-In & Sign-Up 
 import React, { useState } from "react";
-import { Menu, Star } from 'lucide-react';
+import { Menu, Star, Github } from 'lucide-react';
 import RegisterSection from "../components/Register.jsx"
 import Footer from "../components/Footer.jsx"
-import '..styles/Login.css'
+import '../styles/Login.css'
 
 export default function Login(){
      return (
