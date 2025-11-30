@@ -13,18 +13,5 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Leaderboard table for tracking high scores
-CREATE TABLE IF NOT EXISTS leaderboard (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    username VARCHAR(50) NOT NULL,
-    score INT NOT NULL,
-    time_taken INT NOT NULL, -- in seconds
-    difficulty_level VARCHAR(20) DEFAULT 'medium',
-    game_mode VARCHAR(50) DEFAULT 'standard',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    INDEX idx_score (score DESC),
-    INDEX idx_created_at (created_at DESC)
-);
+
 
