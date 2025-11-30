@@ -2,27 +2,29 @@ import React, { useState } from "react";
 
 export default function RegisterSection() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-  
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // simple placeholder logic
     setTimeout(() => {
-        setLoading(false);
-        setMessage("Account created successfully!");
+      setLoading(false);
+      setMessage("Account created successfully!");
     }, 1500);
   };
 
@@ -33,7 +35,9 @@ export default function RegisterSection() {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username" className="form-label">Username</label>
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
           <input
             type="text"
             id="username"
@@ -46,7 +50,9 @@ export default function RegisterSection() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="register-email" className="form-label">Email</label>
+          <label htmlFor="register-email" className="form-label">
+            Email
+          </label>
           <input
             type="email"
             id="register-email"
@@ -59,7 +65,9 @@ export default function RegisterSection() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="register-password" className="form-label">Password</label>
+          <label htmlFor="register-password" className="form-label">
+            Password
+          </label>
           <input
             type="password"
             id="register-password"
@@ -72,11 +80,13 @@ export default function RegisterSection() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+          <label htmlFor="confirmPassword" className="form-label">
+            Confirm Password
+          </label>
           <input
             type="password"
             id="confirmPassword"
-            name="confirmPassword" 
+            name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             className="form-input"

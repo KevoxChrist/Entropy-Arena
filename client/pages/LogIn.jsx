@@ -1,22 +1,26 @@
 //Sign-In & Sign-Up 
-import React, { useState } from "react";
-import { Menu, Star, Github } from 'lucide-react';
-import RegisterSection from "../components/Register.jsx"
-import Footer from "../components/Footer.jsx"
+import React from "react";
+import { Star, Github } from 'lucide-react';
+import RegisterSection from "../components/userAccount/Register.jsx" 
+import Footer from "../components/Footer.jsx" 
+import Header from "../components/Header.jsx" 
 import '../styles/Login.css'
 
 export default function Login(){
      return (
     <div className="app-container">
+      
+      <Header />
 
-      {/* Main */}
+      {/* Main Content Card Container */}
       <div className="main-content">
         <div className="auth-card">
 
-            {/* Login */}
+            {/* Login Section */}
           <section style={{ marginBottom: '2.5rem' }}>
             <h2 className="section-title">Login</h2>
             
+            {/* Social Buttons */}
             <div className="social-buttons">
               <button className="btn-social btn-github">
                 Github <Github size={18} />
@@ -26,11 +30,13 @@ export default function Login(){
               </button>
             </div>
 
+            {/* OR Divider */}
             <div className="divider-container">
               <div className="divider-line" />
               <span className="divider-text">OR</span>
             </div>
 
+            {/* Login Form */}
             <form>
               <div className="form-group">
                 <label className="form-label">Email</label>
@@ -44,11 +50,12 @@ export default function Login(){
             </form>
           </section>
 
-          {/* REGISTER SECTION */}
           <RegisterSection />
           
         </div>
       </div>
+      
+
     <Footer />
     </div>
   );
