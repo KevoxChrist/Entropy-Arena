@@ -1,5 +1,5 @@
 //Sign-In & Sign-Up 
-
+import React from "react";
 import { Star, Github } from 'lucide-react';
 import RegisterSection from "../components/userAccount/Register.jsx" 
 import Footer from "../components/Footer.jsx" 
