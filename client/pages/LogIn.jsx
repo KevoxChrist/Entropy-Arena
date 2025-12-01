@@ -3,14 +3,14 @@ import React from "react";
 import { Star, Github } from 'lucide-react';
 import RegisterSection from "../components/userAccount/Register.jsx" 
 import Footer from "../components/Footer.jsx" 
-import Header from "../components/Header.jsx" 
+// import Header from "../components/Header.jsx" 
 import '../styles/Login.css'
 
 export default function Login(){
      return (
     <div className="app-container">
       
-      <Header />
+      {/* <Header /> */}
 
       {/* Main Content Card Container */}
       <div className="main-content">
