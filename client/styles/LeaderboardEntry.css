@@ -1,0 +1,119 @@
+.leaderboard-entry {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 90px 90px;
+  grid-template-areas: "rank user time date";
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 0.8rem;
+  border-radius: 16px;
+  border: 1px solid #cfd0d6;
+  background: linear-gradient(180deg, #dfdfe4, #d7d8de);
+  box-shadow: 0 12px 22px rgba(15, 15, 16, 0.09);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.leaderboard-entry + .leaderboard-entry {
+  margin-top: 0.65rem;
+}
+
+.leaderboard-entry--top {
+  border-color: #101010;
+  background: linear-gradient(180deg, #d9d9de, #cfd0d6);
+  box-shadow: 0 14px 24px rgba(15, 15, 16, 0.16);
+}
+
+.leaderboard-entry:hover {
+  transform: translateY(-1px);
+  border-color: #101010;
+  box-shadow: 0 8px 18px rgba(15, 15, 16, 0.12);
+}
+
+.leaderboard-entry:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(15, 15, 16, 0.12);
+}
+
+.entry-rank {
+  grid-area: rank;
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-align: center;
+  color: #0f0f10;
+}
+
+.leaderboard-entry--top .entry-rank {
+  background: #0f0f10;
+  color: #f7f7f9;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+}
+
+.entry-user {
+  grid-area: user;
+  font-weight: 700;
+  color: #111114;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entry-time {
+  grid-area: time;
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 4px;
+  font-weight: 800;
+  color: #0f0f10;
+  text-align: right;
+}
+
+.entry-time-value {
+  font-size: 1.05rem;
+}
+
+.entry-time-unit {
+  font-size: 0.75rem;
+  color: #4b4b50;
+}
+
+.entry-date {
+  grid-area: date;
+  text-align: right;
+  font-weight: 600;
+  color: #4b4b50;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .leaderboard-entry {
+    grid-template-columns: 64px 1.4fr 96px 110px;
+    gap: 0.75rem;
+    padding: 0.95rem 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .leaderboard-entry {
+    grid-template-columns: 42px minmax(0, 1fr) 90px 90px;
+    gap: 0.5rem;
+  }
+
+  .entry-date {
+    font-size: 0.7rem;
+    text-align: right;
+  }
+}
+
+@media (max-width: 340px) {
+  .leaderboard-entry {
+    grid-template-columns: 42px minmax(0, 1fr) 96px;
+    grid-template-areas: "rank user time";
+  }
+
+  .entry-date {
+    display: none;
+  }
+}
