@@ -1,0 +1,58 @@
+
+
+/* Header */
+.header {
+  background-color: #e4e2dd00;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  position: fixed; /* stays in place while scrolling */
+  top: 0; /* stick to the top (This is important for the Lightphone effect I saw) */
+  left: 0;
+  width: 100%; /* span the full width */
+  z-index: 1000; /* keep it above other content like the hero images */
+  
+}
+
+.header img{
+    width: 16rem;
+    transform: translate(4rem,-5rem);
+}
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e05d09;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-item {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  border: 2px solid transparent;
+}
+
+.nav-item.shop {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 99px;
+  transform: translateY(-6rem);
+}
+
+.nav-item.contact{
+  color: #ffffff;
+  font-weight: bolder;
+
+}
+
+
+.nav-item:hover {
+  opacity: 0.8;
+}
