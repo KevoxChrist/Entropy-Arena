@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 // import Arena from './pages/Arena'
-import Login from './pages/Login'
+import Login from './pages/LogIn'
 // import Lesson from './pages/Lesson'
 import Arena from './pages/Arena'
 // import NotFound from './pages/NotFound'
