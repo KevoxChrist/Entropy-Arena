@@ -12,5 +12,14 @@ CREATE TABLE users (
     last_login TIMESTAMP NULL
 );
 
+-- Leaderboard table for tracking user times and ranks
+CREATE TABLE leaderboard (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_rank INT NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    time_seconds DECIMAL(10,2) NOT NULL,
+    recorded_date DATE NOT NULL
+);
+
 
 
