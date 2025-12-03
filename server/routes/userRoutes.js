@@ -64,8 +64,7 @@ router.post('/register', async (req, res) => {
       user: {
         id: result.insertId,
         username,
-        email,
-        is_admin: false
+        email
       }
     });
 
@@ -120,7 +119,7 @@ router.post('/login', async (req, res) => {
 
     // Update last login (optional)
     await db.execute(
-      'UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?',
       [user.id]
     );
 
@@ -132,7 +131,6 @@ router.post('/login', async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        is_admin: user.is_admin,
         created_at: user.created_at
       }
     });
@@ -154,7 +152,7 @@ router.get('/user/:id', async (req, res) => {
     const { id } = req.params;
 
     const [users] = await db.execute(
-      'SELECT id, username, email, is_admin, created_at FROM users WHERE id = ?',
+      'SELECT id, username, email, created_at FROM users WHERE id = ?',
       [id]
     );
 
