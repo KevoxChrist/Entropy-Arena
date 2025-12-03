@@ -152,6 +152,17 @@
   border-color: rgba(255, 255, 255, 0.12);
 }
 
+.nav-link--login {
+  background: #f7f7f9;
+  color: #0f0f10;
+  border-color: #f7f7f9;
+}
+
+.nav-link--login.active {
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
 @media (min-width: 768px) {
   .header-inner {
     padding: 1rem 2rem;
@@ -181,5 +192,16 @@
     color: #f7f7f9;
     background: #0f0f10;
     border-color: #0f0f10;
+  }
+
+  .nav-link--login {
+    background: #0f0f10;
+    color: #f7f7f9;
+    border-color: #0f0f10;
+  }
+
+  .nav-link--login.active {
+    background: #26262b;
+    border-color: #26262b;
   }
 }

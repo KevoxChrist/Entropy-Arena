@@ -3,10 +3,9 @@ import { NavLink } from 'react-router-dom'
 import '../styles/Header.css'
 
 const navItems = [
-  { path: '/', label: 'Home', end: true },
-  { path: '/lessons', label: 'Lessons' },
+  { path: '/', label: 'Arena', end: true },
+  { path: '/FAQ', label: 'FAQ' },
   { path: '/leaderboard', label: 'Leaderboard' },
-  { path: '/arena', label: 'Arena' },
   { path: '/account', label: 'Account' },
 ]
 
@@ -52,6 +51,16 @@ function Header() {
               {item.label}
             </NavLink>
           ))}
+
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `nav-link nav-link--login ${isActive ? 'active' : ''}`
+            }
+            onClick={closeMenu}
+          >
+            Log in
+          </NavLink>
         </nav>
       </div>
     </header>
