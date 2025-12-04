@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import '../styles/Header.css'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 const navItems = [
   { path: '/', label: 'Arena', end: true },

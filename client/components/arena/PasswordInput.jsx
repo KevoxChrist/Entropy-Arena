@@ -1,6 +1,6 @@
 import zxcvbn from 'zxcvbn';
 
-function PasswordInput({ value, onChange, placeholder = "Enter password" }) {
+function PasswordInput({ value, onChange, placeholder = "Enter password", showRequirements = false, requirements = {} }) {
     const handleChange = (e) => {
         const newValue = e.target.value;
 
@@ -39,6 +39,14 @@ function PasswordInput({ value, onChange, placeholder = "Enter password" }) {
                         {getStrengthLabel(strength.score)}
                     </span>
                     {/* <span className="strength-score">+9</span> */}
+                </div>
+            )}
+            {showRequirements && (
+                <div className="password-requirements">
+                    <span className={`requirement ${requirements.hasNumber ? 'active' : ''}`}>123</span>
+                    <span className={`requirement ${requirements.hasSymbol ? 'active' : ''}`}>!@#$</span>
+                    <span className={`requirement ${requirements.hasUppercase ? 'active' : ''}`}>↑ABC</span>
+                    <span className={`requirement ${requirements.hasLowercase ? 'active' : ''}`}>↓abc</span>
                 </div>
             )}
         </div>
