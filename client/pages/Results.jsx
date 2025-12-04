@@ -1,7 +1,12 @@
 // import '../styles/Arena.css';
 import '../styles/Results.css';
+import { useAuth } from '../contexts/AuthContext';
+import { useEffect, useState } from 'react';
 
 function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
+    const { user } = useAuth();
+    const [savedToLeaderboard, setSavedToLeaderboard] = useState(false);
+    const [saveError, setSaveError] = useState('');
     const getStrengthLabel = (score) => {
         const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Centuries'];
         return labels[score];
@@ -105,9 +110,54 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
 
     const aiFeedback = generateAIFeedback(parseFloat(accuracy), wpm, entropyScore, passwordLength);
 
+    // Save to leaderboard when component mounts (only if user is logged in and not already saved)
+    useEffect(() => {
+        const saveToLeaderboard = async () => {
+            if (!user || savedToLeaderboard) return;
+
+            try {
+                const response = await fetch('/api/leaderboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: user.username,
+                        time_seconds: timeTaken,
+                        score: totalScore
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    setSavedToLeaderboard(true);
+                } else {
+                    setSaveError(data.message || 'Failed to save to leaderboard');
+                }
+            } catch (error) {
+                console.error('Error saving to leaderboard:', error);
+                setSaveError('Network error while saving to leaderboard');
+            }
+        };
+
+        saveToLeaderboard();
+    }, [user, timeTaken, totalScore, savedToLeaderboard]);
+
     return (
         <main className="results">
             <article className="container">
+                {/* Leaderboard Save Status */}
+                {user && (
+                    <div className="save-status">
+                        {savedToLeaderboard && (
+                            <div className="save-success">Score saved to leaderboard!</div>
+                        )}
+                        {saveError && (
+                            <div className="save-error">{saveError}</div>
+                        )}
+                    </div>
+                )}
                 <section className="main-grid">
                     <section className="left-middle-wrapper">
                         <div className="stats-row">

@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // Test script for Admin functionality
-console.log('👑 Testing Admin User Functionality\n');
+console.log('Testing Admin User Functionality\n');
 
 const API_BASE = 'http://localhost:5000/api/auth';
 
 async function testAdminFunctionality() {
   try {
     // Test 1: Login as admin user
-    console.log('🔐 Testing admin login...');
+    console.log('Testing admin login...');
     const adminLogin = await fetch(`${API_BASE}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -17,7 +17,7 @@ async function testAdminFunctionality() {
       })
     });
     const adminData = await adminLogin.json();
-    console.log(`✅ Admin login: ${adminData.user.username} (admin: ${adminData.user.is_admin})`);
+    console.log(`Admin login: ${adminData.user.username} (admin: ${adminData.user.is_admin})`);
     
     // Test 2: Login as regular user
     console.log('\n👤 Testing regular user login...');
@@ -30,10 +30,10 @@ async function testAdminFunctionality() {
       })
     });
     const userData = await userLogin.json();
-    console.log(`✅ Regular user login: ${userData.user.username} (admin: ${userData.user.is_admin})`);
+    console.log(`Regular user login: ${userData.user.username} (admin: ${userData.user.is_admin})`);
     
     // Test 3: Get user profile
-    console.log('\n📋 Testing user profile retrieval...');
+    console.log('\nTesting user profile retrieval...');
     const profile = await fetch(`${API_BASE}/user/${adminData.user.id}`);
     const profileData = await profile.json();
     console.log(`Profile retrieved: ${profileData.user.username} (admin: ${profileData.user.is_admin})`);

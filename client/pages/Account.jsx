@@ -1,5 +1,6 @@
-//Updated Account Page, w/ Mock Data 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import "../styles/Account.css";
 
 function formatSeconds(totalSeconds) {
@@ -16,47 +17,85 @@ function formatSeconds(totalSeconds) {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
-// Mock Data (Replace with fetch later)
-const mockData = {
-  user: {
-    username: "Guest!",
-  },
-  rank: {
-    tier: "bronze", // gold | silver | bronze
-    bestScore: 186,
-    latestScore: 172,
-  },
-  time: {
-    latestTimeSeconds: 425.5,
-  },
-};
-
-function getTierLabel(tier) {
-  if (!tier) return "Unranked";
-  const names = {
-    gold: "Gold",
-    silver: "Silver",
-    bronze: "Bronze",
-  };
-  return names[tier.toLowerCase()] || "Unranked";
-}
-
-function getTierClass(tier) {
-  if (!tier) return "rank-tier rank-tier-unranked";
-  return `rank-tier rank-tier-${tier.toLowerCase()}`;
-}
-
 export default function AccountPage() {
-  const { user, rank, time } = mockData;
-  const username = user?.username ?? "Player";
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [userStats, setUserStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
 
-  const rankTier = rank?.tier ?? null;
-  const rankLabel = getTierLabel(rankTier);
-  const bestScore = rank?.bestScore ?? 0;
-  const latestScore = rank?.latestScore ?? 0;
+    const fetchUserStats = async () => {
+      try {
+        // Fetch user's leaderboard entries
+        const response = await fetch(`/api/leaderboard/user/${user.username}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          const entries = data.data;
+          if (entries.length > 0) {
+            // Get best score and latest time
+            const bestEntry = entries.reduce((best, current) => 
+              current.time_seconds < best.time_seconds ? current : best
+            );
+            const latestEntry = entries[entries.length - 1];
+            
+            setUserStats({
+              username: user.username,
+              bestTime: bestEntry.time_seconds,
+              latestTime: latestEntry.time_seconds,
+              rank: bestEntry.user_rank,
+              totalGames: entries.length,
+              bestScore: Math.round((100 - bestEntry.time_seconds) * 100) // Calculate score from time
+            });
+          } else {
+            setUserStats({
+              username: user.username,
+              bestTime: 0,
+              latestTime: 0,
+              rank: null,
+              totalGames: 0,
+              bestScore: 0
+            });
+          }
+        } else {
+          setError('Failed to load user statistics');
+        }
+      } catch (err) {
+        console.error('Error fetching user stats:', err);
+        setError('Network error loading statistics');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const latestTime = time?.latestTimeSeconds ?? 0;
+    fetchUserStats();
+  }, [user, navigate]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  if (loading) {
+    return <div className="account-page">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="account-page">Error: {error}</div>;
+  }
+
+  const username = userStats?.username ?? "Player";
+  const rankPosition = userStats?.rank ?? null;
+  const bestScore = userStats?.bestScore ?? 0;
+  const latestTime = userStats?.latestTime ?? 0;
+  const bestTime = userStats?.bestTime ?? 0;
+  const totalGames = userStats?.totalGames ?? 0;
 
   return (
     <div className="account-page">
@@ -73,8 +112,13 @@ export default function AccountPage() {
         </div>
 
         <div className="account-sidebar-item">
-          <span className="account-label">Time</span>
-          <span className="account-value">{formatSeconds(latestTime)}</span>
+          <span className="account-label">Best Time</span>
+          <span className="account-value">{formatSeconds(bestTime)}</span>
+        </div>
+
+        <div className="account-sidebar-item">
+          <span className="account-label">Games</span>
+          <span className="account-value">{totalGames}</span>
         </div>
       </aside>
 
@@ -108,12 +152,39 @@ export default function AccountPage() {
             <p className="account-card-primary">{latestScore}</p>
           </article>
 
-          {/* Time Card */}
+          {/* Best Time card */}
           <article className="account-card">
-            <h2 className="account-card-title">Time</h2>
-            <p className="account-card-primary">{formatSeconds(latestTime)}</p>
-            <p className="account-card-secondary">Latest completed game time</p>
+            <h2 className="account-card-title">Best Time</h2>
+            <p className="account-card-primary">{formatSeconds(bestTime)}</p>
+            <p className="account-card-secondary">
+              Personal record
+            </p>
           </article>
+
+          {/* Latest Time card */}
+          <article className="account-card">
+            <h2 className="account-card-title">Latest Time</h2>
+            <p className="account-card-primary">{formatSeconds(latestTime)}</p>
+            <p className="account-card-secondary">
+              Most recent completion
+            </p>
+          </article>
+
+          {/* Games Played card */}
+          <article className="account-card">
+            <h2 className="account-card-title">Games Played</h2>
+            <p className="account-card-primary">{totalGames}</p>
+            <p className="account-card-secondary">
+              Total challenges completed
+            </p>
+          </article>
+        </section>
+
+        {/* Logout button */}
+        <section className="account-actions">
+          <button className="btn-logout" onClick={handleLogout}>
+            Logout
+          </button>
         </section>
       </main>
     </div>

@@ -59,7 +59,7 @@ router.get('/top/:limit', async (req, res) => {
 // @access  Public
 router.post('/', async (req, res) => {
   try {
-    const { username, time_seconds } = req.body;
+    const { username, time_seconds, score } = req.body;
 
     // Validation
     if (!username || time_seconds === undefined || time_seconds === null) {
@@ -129,17 +129,12 @@ router.get('/user/:username', async (req, res) => {
       [username]
     );
 
-    if (entries.length === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'No entries found for this user' 
-      });
-    }
-
+    // Return empty array instead of 404 for no entries
     res.json({
       success: true,
       data: entries,
-      count: entries.length
+      count: entries.length,
+      message: entries.length === 0 ? 'No entries found for this user' : undefined
     });
 
   } catch (error) {

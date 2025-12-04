@@ -21,7 +21,28 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 2rem;
+  gap: 2rem;
+  position: relative;
+}
+
+.login-prompt {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.login-prompt a {
+  color: #ffc107;
+  text-decoration: underline;
 }
 
 .settings-button {

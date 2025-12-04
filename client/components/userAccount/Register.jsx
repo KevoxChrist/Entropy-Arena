@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterSection() {
   const { register } = useAuth();
@@ -13,10 +14,16 @@ export default function RegisterSection() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -25,20 +32,20 @@ export default function RegisterSection() {
     setMessage("");
     setErrors({});
 
-    try {
-      await register(formData);
-      setMessage("Account created successfully!");
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (err) {
-      setErrors({ form: err.message || "Registration failed" });
-    } finally {
-      setLoading(false);
+    const result = await register(
+      formData.username,
+      formData.email,
+      formData.password,
+      formData.confirmPassword
+    );
+
+    if (result.success) {
+      setMessage("Account created successfully! Redirecting...");
+      setTimeout(() => navigate('/arena'), 2000);
+    } else {
+      setErrors({ general: result.message });
     }
+    setLoading(false);
   };
 
   return (
@@ -46,6 +53,7 @@ export default function RegisterSection() {
       <h2 className="section-title">Register</h2>
       {errors.form && <div className="error-msg">{errors.form}</div>}
       {message && <div className="success-msg">{message}</div>}
+      {errors.general && <div className="error-msg">{errors.general}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
