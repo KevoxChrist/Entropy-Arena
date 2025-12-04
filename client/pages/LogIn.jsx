@@ -1,11 +1,39 @@
-//Sign-In & Sign-Up 
-import React from "react";
-// import { Star, Github } from 'lucide-react';
-import RegisterSection from "../components/userAccount/Register.jsx" 
-import '../styles/Login.css'
+//Sign-In & Sign-Up
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Star, Github } from 'lucide-react';
+import RegisterSection from "../components/userAccount/Register.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import '../styles/Login.css';
 
-export default function Login(){
-     return (
+export default function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      await login(form);
+      navigate("/Leaderboard");
+    } catch (err) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
     <div className="app-container">
       
 
@@ -34,16 +62,31 @@ export default function Login(){
             </div>
 
             {/* Login Form */}
-            <form>
+            <form onSubmit={handleSubmit}>
+              {error && <div className="error-msg">{error}</div>}
               <div className="form-group">
                 <label className="form-label">Email</label>
-                <input type="email" className="form-input" />
+                <input
+                  type="email"
+                  name="email"
+                  className="form-input"
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-input" />
+                <input
+                  type="password"
+                  name="password"
+                  className="form-input"
+                  value={form.password}
+                  onChange={handleChange}
+                />
               </div>
-              <button className="btn-submit">Sign In</button>
+              <button className="btn-submit" disabled={loading}>
+                {loading ? "Signing in..." : "Sign In"}
+              </button>
             </form>
           </section>
 
