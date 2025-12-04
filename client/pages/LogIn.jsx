@@ -46,14 +46,14 @@ export default function Login() {
             <h2 className="section-title">Login</h2>
             
             {/* Social Buttons */}
-            <div className="social-buttons">
+            {/* <div className="social-buttons">
               <button className="btn-social btn-github">
                 Github <Github size={18} />
               </button>
               <button className="btn-social btn-google">
                 Google <Star size={18} fill="black" stroke="black" />
               </button>
-            </div>
+            </div> */}
 
             {/* OR Divider */}
             <div className="divider-container">
