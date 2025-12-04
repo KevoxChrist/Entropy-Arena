@@ -131,7 +131,8 @@ router.post('/login', async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        created_at: user.created_at
+        created_at: user.created_at,
+        is_admin: user.is_admin
       }
     });
 

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function RegisterSection() {
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -17,20 +19,32 @@ export default function RegisterSection() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage("");
+    setErrors({});
 
-    // simple placeholder logic
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await register(formData);
       setMessage("Account created successfully!");
-    }, 1500);
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      setErrors({ form: err.message || "Registration failed" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section>
       <h2 className="section-title">Register</h2>
+      {errors.form && <div className="error-msg">{errors.form}</div>}
       {message && <div className="success-msg">{message}</div>}
 
       <form onSubmit={handleSubmit}>

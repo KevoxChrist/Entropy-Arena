@@ -1,0 +1,40 @@
+.lessons-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 0.35rem 0 1.2rem;
+}
+
+.module-card {
+  padding: 1.1rem 1.05rem;
+  background: #f4f4f7;
+}
+
+.module-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.35rem;
+  color: #101010;
+}
+
+.module-subtitle {
+  margin: 0;
+  color: #4b4b50;
+  font-weight: 600;
+}
+
+.lesson-collection {
+  padding: 0.85rem 0.7rem;
+  background: linear-gradient(180deg, #ebebef, #e4e4e9);
+  border-radius: 20px;
+  border: 1px solid #cbccd3;
+}
+
+@media (min-width: 768px) {
+  .module-card {
+    padding: 1.35rem 1.2rem;
+  }
+
+  .lesson-collection {
+    padding: 1rem 0.9rem;
+  }
+}

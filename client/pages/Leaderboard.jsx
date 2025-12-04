@@ -1,13 +1,22 @@
 import { useEffect, useMemo, useState } from 'react'
 import LeaderChart from '../components/leaderboard/LeaderChart.jsx'
 import LeaderboardEntry from '../components/leaderboard/LeaderboardEntry.jsx'
-import { leaderboardEntries } from './leaderboardData.js'
+import useLeaderboard from '../hooks/useLeaderboard.js'
+import { useAuth } from '../context/AuthContext.jsx'
 import '../styles/Leaderboard.css'
+import '.././index.css'
 
 function Leaderboard() {
-  const sortedEntries = [...leaderboardEntries]
-    .sort((a, b) => a.time - b.time)
-    .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  const { entries, loading, error } = useLeaderboard()
+  const { user, isAdmin } = useAuth()
+
+  const sortedEntries = useMemo(
+    () =>
+      [...entries]
+        .sort((a, b) => a.time - b.time)
+        .map((entry, index) => ({ ...entry, rank: index + 1 })),
+    [entries],
+  )
 
   const getPageSize = () =>
     typeof window !== 'undefined' &&
@@ -45,10 +54,37 @@ function Leaderboard() {
     setCurrentPage(next)
   }
 
+  if (loading) {
+    return (
+      <section className="leaderboard-page">
+        <div className="surface leaderboard-hero">
+          <h1 className="leaderboard-title">Leaderboard</h1>
+          <p className="leaderboard-subtitle">Loading leaderboard…</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error && !sortedEntries.length) {
+    return (
+      <section className="leaderboard-page">
+        <div className="surface leaderboard-hero">
+          <h1 className="leaderboard-title">Leaderboard</h1>
+          <p className="leaderboard-subtitle">
+            We could not load the leaderboard right now.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="leaderboard-page">
       <div className="surface leaderboard-hero">
         <h1 className="leaderboard-title">Leaderboard</h1>
+        {user ? (
+          <p className="leaderboard-greeting">Welcome {user.username}</p>
+        ) : null}
         <p className="leaderboard-subtitle">
           May the best password creator win!
         </p>
@@ -65,7 +101,11 @@ function Leaderboard() {
         </div>
         <div className="table-body">
           {currentPageEntries.map((entry) => (
-            <LeaderboardEntry key={entry.rank} entry={entry} />
+            <LeaderboardEntry
+              key={entry.id ?? entry.rank}
+              entry={entry}
+              isAdmin={isAdmin}
+            />
           ))}
         </div>
 
