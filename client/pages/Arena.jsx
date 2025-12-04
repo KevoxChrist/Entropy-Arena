@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/arena/PasswordInput';
 import GameTimer from '../components/arena/GameTimer';
 import Results from './Results';
@@ -11,6 +12,7 @@ import '../styles/Arena.css';
 //2. Add event listener to password2 so that it will launch into the results page
 
 function Arena(){
+    const { user } = useAuth();
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [strength1, setStrength1] = useState(null);
@@ -96,6 +98,11 @@ function Arena(){
         <main className="arena">
             <header className="arena-header">
                 <button className="settings-button">Test Settings =3=</button>
+                {!user && (
+                    <div className="login-prompt">
+                         <a href="/Login">Log in</a> to save your score to the leaderboard
+                    </div>
+                )}
             </header>
 
             <GameTimer time={timer} />
