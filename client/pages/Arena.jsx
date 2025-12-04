@@ -92,7 +92,7 @@ function Arena(){
 
     return(
        <>
-        <Header/>
+        {/* <Header/> */}
         <main className="arena">
             <header className="arena-header">
                 <button className="settings-button">Test Settings =3=</button>
