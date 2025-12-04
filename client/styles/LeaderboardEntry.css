@@ -87,6 +87,41 @@
   white-space: nowrap;
 }
 
+.entry-admin-actions {
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.entry-admin-btn {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid #cfd0d6;
+  background: #f7f7f9;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.entry-edit-form {
+  margin-bottom: 0.15rem;
+}
+
+.entry-edit-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #cfd0d6;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+.entry-error {
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  color: #b3261e;
+}
+
 @media (min-width: 768px) {
   .leaderboard-entry {
     grid-template-columns: 64px 1.4fr 96px 110px;

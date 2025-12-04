@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function RegisterSection() {
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -50,6 +51,7 @@ export default function RegisterSection() {
   return (
     <section>
       <h2 className="section-title">Register</h2>
+      {errors.form && <div className="error-msg">{errors.form}</div>}
       {message && <div className="success-msg">{message}</div>}
       {errors.general && <div className="error-msg">{errors.general}</div>}
 

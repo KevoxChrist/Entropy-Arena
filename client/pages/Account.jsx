@@ -99,7 +99,7 @@ export default function AccountPage() {
 
   return (
     <div className="account-page">
-      {/* Left sidebar */}
+      {/* Sidebar */}
       <aside className="account-sidebar">
         <div className="account-sidebar-item">
           <span className="account-label">Username</span>
@@ -108,9 +108,7 @@ export default function AccountPage() {
 
         <div className="account-sidebar-item">
           <span className="account-label">Rank</span>
-          <span className="account-value">
-            {rankPosition ? `#${rankPosition}` : "Unranked"}
-          </span>
+          <span className="account-value">{rankLabel}</span>
         </div>
 
         <div className="account-sidebar-item">
@@ -124,7 +122,7 @@ export default function AccountPage() {
         </div>
       </aside>
 
-      {/* Main content */}
+      {/* Main */}
       <main className="account-main">
         <header className="account-header">
           <h1 className="account-title">
@@ -133,13 +131,25 @@ export default function AccountPage() {
         </header>
 
         <section className="account-cards">
-          {/* Rank card */}
+
+          {/* Rank Card */}
           <article className="account-card">
             <h2 className="account-card-title">Rank</h2>
-            <p className="account-card-primary">
-              {rankPosition ? `#${rankPosition}` : "Unranked"}
-            </p>
-            <p className="account-card-secondary">Best score: {bestScore}</p>
+            <div className="rank-card-main">
+              <span className={getTierClass(rankTier)}>{rankLabel}</span>
+            </div>
+          </article>
+
+          {/* Best Score Card */}
+          <article className="account-card">
+            <h2 className="account-card-title">Best Score</h2>
+            <p className="account-card-primary">{bestScore}</p>
+          </article>
+
+          {/* Latest Score Card */}
+          <article className="account-card">
+            <h2 className="account-card-title">Latest Score</h2>
+            <p className="account-card-primary">{latestScore}</p>
           </article>
 
           {/* Best Time card */}

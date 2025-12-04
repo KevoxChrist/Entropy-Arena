@@ -8,12 +8,12 @@
     sans-serif;
 }
 
-/* Optional: center helper if you ever need it */
+/* Optional: center helper
 .account-center {
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 /* Sidebar (left column) */
 .account-sidebar {
@@ -54,7 +54,7 @@
   box-sizing: border-box;
 }
 
-/* “Hello, Account” header */
+/* Header */
 .account-header {
   border-radius: 1rem;
   padding: 1.5rem 1.75rem;
@@ -72,14 +72,15 @@
   font-weight: 700;
 }
 
-/* Cards container (Rank + Time) */
+/* Cards container — 2×2 grid */
 .account-cards {
-  display: flex;
+  display: grid;
+  /* grid-template-columns: repeat (2, 1fr); */
   gap: 2rem;
   align-items: stretch;
 }
 
-/* Shared card styles */
+/* Each card */
 .account-card {
   flex: 1;
   background: #11111a;
@@ -112,7 +113,48 @@
   margin: 0;
 }
 
-/* Basic responsiveness */
+/* Rank Tier Badge */
+.rank-card-main {
+  margin-bottom: 0.75rem;
+}
+
+.rank-tier {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 700; /* NOW BOLD */
+  border: 1px solid transparent;
+}
+
+/* Gold / Silver / Copper */
+.rank-tier-gold {
+  background: linear-gradient(135deg, #ffd56a, #ffb347);
+  color: #4a2b00;
+  border-color: #ffdf8a;
+}
+
+.rank-tier-silver {
+  background: linear-gradient(135deg, #e0e4f0, #c9cedd);
+  color: #21242f;
+  border-color: #f0f2ff;
+}
+
+.rank-tier-bronze {
+  background: linear-gradient(135deg, #e8a57a, #c4713f);
+  color: #2b1305;
+  border-color: #f1c0a0;
+}
+
+.rank-tier-unranked {
+  background: #1a1a24;
+  color: #9b9bb2;
+  border-color: #333345;
+}
+
+/* Responsive */
 @media (max-width: 900px) {
   .account-page {
     flex-direction: column;
@@ -131,7 +173,7 @@
   }
 
   .account-cards {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
 
