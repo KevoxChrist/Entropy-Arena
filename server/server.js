@@ -1,20 +1,35 @@
 // DB CONNECTION
-const { connectDatabase } = require('./config/db');
+import { db, verifyDatabaseConnection } from './config/db.js';
 //EXPRESS
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 const app = express();
 //CORS
-const cors = require('cors');
+import cors from 'cors';
 app.use(cors());
 app.use(express.json()); //serving JSON
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 //PORT
 const PORT = 5000;
 
-
-
+// Import routes
+import userRoutes from './routes/userRoutes.js';
+import leaderboardRoutes from './routes/leaderboardRoutes.js';
 
 //----------------------ROUTES--------------------------
+// API Routes
+app.use('/api/auth', userRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+
+// Basic test route
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Server is working!' });
+});
 
 
 
@@ -28,6 +43,7 @@ app.get("/*splat", (req, res) => {
 });
 
 //--------------------SERVER START---------------------------
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running: http://localhost:${PORT}`);
-})
+    await verifyDatabaseConnection();
+});
