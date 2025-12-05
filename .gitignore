@@ -27,3 +27,5 @@ dist-ssr
 node_modules
 .env
 server/node_modules
+.env.production
+.env.development
