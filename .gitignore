@@ -29,3 +29,5 @@ node_modules
 server/node_modules
 .env.production
 .env.development
+.env.production
+.env.development
