@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:5000/api/leaderboard'
+import { API_ENDPOINTS } from '../config/api.js';
+
+const API_BASE = API_ENDPOINTS.LEADERBOARD;
 
 export async function updateLeaderboardUsername(id, username) {
   const response = await fetch(`${API_BASE}/${id}`, {

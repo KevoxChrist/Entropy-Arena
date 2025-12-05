@@ -21,6 +21,7 @@ function Arena(){
     const [timerStarted, setTimerStarted] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [finalTime, setFinalTime] = useState(null);
+    const [startTime, setStartTime] = useState(null);
 
     // Track password requirements
     const [requirements, setRequirements] = useState({
@@ -34,12 +35,14 @@ function Arena(){
     useEffect(() => {
         if (password1 && !timerStarted) {
             setTimerStarted(true);
+            setStartTime(Date.now());
         }
     }, [password1, timerStarted]);
 
     //Timer count down and stopping count at zero
     useEffect(() => {
-        if (timer <= 0 || !timerStarted) return;
+        // Stop timer if results are showing, timer is at 0, or timer hasn't started
+        if (showResults || timer <= 0 || !timerStarted) return;
 
         const interval = setInterval(() => {
             setTimer((prevTimer) => {
@@ -52,12 +55,12 @@ function Arena(){
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [timer, timerStarted]);
+    }, [timer, timerStarted, showResults]);
 
     //Automatically show results when timer hits 0
     useEffect(() => {
         if (timer === 0 && timerStarted) {
-            setFinalTime(0);
+            setFinalTime(30); // Full 30 seconds elapsed
             setShowResults(true);
         }
     }, [timer, timerStarted]);
@@ -83,7 +86,9 @@ function Arena(){
 
         // If password2 matches password1 and both have values, show results
         if (value && password1 && value === password1) {
-            setFinalTime(timer); // Capture the exact time when passwords match
+            // Calculate precise elapsed time in seconds with 2 decimal places
+            const elapsedSeconds = (Date.now() - startTime) / 1000;
+            setFinalTime(elapsedSeconds);
             setShowResults(true);
         }
     };
@@ -120,6 +125,7 @@ function Arena(){
         setTimerStarted(false);
         setShowResults(false);
         setFinalTime(null);
+        setStartTime(null);
         setRequirements({
             hasNumber: false,
             hasSymbol: false,
