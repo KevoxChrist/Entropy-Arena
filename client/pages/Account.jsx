@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { API_ENDPOINTS } from "../config/api.js";
 import "../styles/Account.css";
 function formatSeconds(totalSeconds) {
   const sec = Number(totalSeconds) || 0;
@@ -28,7 +29,7 @@ export default function AccountPage() {
     const fetchUserStats = async () => {
       try {
         // Fetch user's leaderboard entries
-        const response = await fetch(`/api/leaderboard/user/${user.username}`);
+        const response = await fetch(`${API_ENDPOINTS.LEADERBOARD}/user/${user.username}`);
         const data = await response.json();
         if (data.success) {
           const entries = data.data;

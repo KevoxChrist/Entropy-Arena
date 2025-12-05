@@ -2,8 +2,9 @@
 import '../styles/Results.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import { API_ENDPOINTS } from '../config/api.js';
 
-function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
+function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRestart }) {
     const { user } = useAuth();
     const [savedToLeaderboard, setSavedToLeaderboard] = useState(false);
     const [saveError, setSaveError] = useState('');
@@ -86,8 +87,7 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     const strengthLabel = getStrengthLabel(passwordData.score);
     const strengthColor = getStrengthColor(passwordData.score);
 
-    // New calculations
-    const timeTaken = 30 - timeRemaining;
+    // Time calculations - timeTaken is passed directly from Arena
     const passwordLength = passwordData.password?.length || 0;
     const wpm = Math.round((passwordLength / 5) / (timeTaken / 60));
 
@@ -99,7 +99,7 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     // TASKS:
     // 1. Configure how the scoring is calulated. Include penalties
     const baseScore = Math.round(passwordData.guesses_log10 * 100);
-    const timeBonus = timeRemaining * 50;
+    const timeBonus = Math.round((30 - timeTaken) * 50); // Bonus based on time remaining
     const accuracyBonus = Math.round(parseFloat(accuracy) * 20);
     const totalScore = Math.round(baseScore + timeBonus + accuracyBonus);
     const xp = Math.round(totalScore * 0.15);
@@ -110,13 +110,15 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
 
     const aiFeedback = generateAIFeedback(parseFloat(accuracy), wpm, entropyScore, passwordLength);
 
-    // Save to leaderboard when component mounts (only if user is logged in and not already saved)
+    // Save to leaderboard when component mounts (only if user is logged in)
     useEffect(() => {
+        let isCancelled = false;
+
         const saveToLeaderboard = async () => {
-            if (!user || savedToLeaderboard) return;
+            if (!user) return;
 
             try {
-                const response = await fetch('/api/leaderboard', {
+                const response = await fetch(API_ENDPOINTS.LEADERBOARD, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -129,20 +131,29 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
                 });
 
                 const data = await response.json();
-                
-                if (data.success) {
-                    setSavedToLeaderboard(true);
-                } else {
-                    setSaveError(data.message || 'Failed to save to leaderboard');
+
+                if (!isCancelled) {
+                    if (data.success) {
+                        setSavedToLeaderboard(true);
+                    } else {
+                        setSaveError(data.message || 'Failed to save to leaderboard');
+                    }
                 }
             } catch (error) {
                 console.error('Error saving to leaderboard:', error);
-                setSaveError('Network error while saving to leaderboard');
+                if (!isCancelled) {
+                    setSaveError('Network error while saving to leaderboard');
+                }
             }
         };
 
         saveToLeaderboard();
-    }, [user, timeTaken, totalScore, savedToLeaderboard]);
+
+        return () => {
+            isCancelled = true;
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <main className="results">
@@ -163,7 +174,7 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
                         <div className="stats-row">
                             <article className="stat-block">
                                 <span className="label">time</span>
-                                <data className="value-large" value={timeTaken.toFixed(1)}>{timeTaken.toFixed(1)}s</data>
+                                <data className="value-large" value={timeTaken.toFixed(2)}>{timeTaken.toFixed(2)}s</data>
                                 <span className="value-sub">{wpm} wpm</span>
                             </article>
                             <article className="stat-block">

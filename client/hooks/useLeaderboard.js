@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { leaderboardEntries as mockEntries } from '../pages/leaderboardData.js'
+import { API_ENDPOINTS } from '../config/api.js'
 
-const API_URL = 'http://localhost:5000/api/leaderboard'
+const API_URL = API_ENDPOINTS.LEADERBOARD
 
 function mapRowToEntry(row) {
   return {
