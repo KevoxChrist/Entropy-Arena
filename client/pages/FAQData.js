@@ -28,7 +28,7 @@ export const faqItems = [
       'No! We use algorithms built from our AI prompt engineer.',
   },
   {
-    id: 'entropy',
+    id: 'shannonEntropy',
     title: 'What is Shannon Entropy?',
     moduleTitle: moduleInfo.title,
     shortDescription: [
