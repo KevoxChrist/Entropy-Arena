@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:5000/api/auth'
+import { API_ENDPOINTS } from '../config/api.js';
+
+const API_BASE = API_ENDPOINTS.AUTH;
 
 export async function registerUser(formData) {
   const response = await fetch(`${API_BASE}/register`, {

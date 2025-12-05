@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config/api.js';
 
 const AuthContext = createContext();
 
@@ -30,7 +31,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ export function AuthProvider({ children }) {
 
   const register = async (username, email, password, confirmPassword) => {
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
