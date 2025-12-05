@@ -7,7 +7,24 @@ import { fileURLToPath } from 'url';
 const app = express();
 //CORS
 import cors from 'cors';
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5000',
+    process.env.ALLOWED_ORIGIN
+].filter(Boolean);
+
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin) || origin.includes('amplifyapp.com')) {
+            callback(null, true);
+        } else {
+            callback(null, true); // Allow all for now, can restrict later
+        }
+    },
+    credentials: true
+}));
 app.use(express.json()); //serving JSON
 
 // Get __dirname equivalent for ES modules
