@@ -6,18 +6,11 @@ export const moduleInfo = {
 
 export const faqItems = [
   {
-    id: 'entropy',
-    title: 'Where is our passwords going?',
-    moduleTitle: moduleInfo.title,
-    shortDescription:
-      'Passwords in the Arena are not saved!',
-  },
-  {
     id: 'passwords',
     title: 'Where is our passwords from Arena going?',
     moduleTitle: moduleInfo.title,
     shortDescription: [
-      'Passwords in the Arena are not saved! They are processed in the browser!',
+      'Passwords in the Arena are not saved. They are processed in the browser.',
     ]
   },
   {
@@ -25,18 +18,18 @@ export const faqItems = [
     title: 'is AI receiving our passwords? ',
     moduleTitle: moduleInfo.title,
     shortDescription:
-      'No! We use algorithms built from our AI prompt engineer.',
+      'No, we use algorithms built from our AI prompt engineer.',
   },
   {
     id: 'shannonEntropy',
     title: 'What is Shannon Entropy?',
     moduleTitle: moduleInfo.title,
     shortDescription: [
-      'Shannon entropy is the measurement of how predictable something is. ',
-      'For passwords, it means how predictable your password is! ',
-      'An example would be, aaaaaaaa, having low entropy. ',
-      'While, a1$(02A, would have high entropy! ',
-      'Thats why it is important to use symbols, different chars, and numbers in password creation!',
+      `Shannon entropy is the measurement of how predictable something is.
+      For passwords, it means how predictable your password is.
+      An example would be: aaaaaaaa, having low entropy. 
+      While: a1$(02A, would have high entropy.
+      That's why it is important to use symbols, different chars, and numbers in password creation!`,
     ]
   },
   {
@@ -45,7 +38,7 @@ export const faqItems = [
     moduleTitle: moduleInfo.title,
     shortDescription: [ 
       'Cryptography is the practice of protecting information through the use of coded algorithms, hashes, and signatures. ',
-      'Cryptography is an essential part of cybersecurity, especially for passwords!',
+      'Cryptography is an essential part of cybersecurity, especially for passwords.',
       '',
     ]
   },
@@ -54,9 +47,9 @@ export const faqItems = [
     title: 'What makes a good password?',
     moduleTitle: moduleInfo.title,
     shortDescription:
-      'Design passwords that balance memorability with strength, and know when to lean on a password manager.',
+      'A good password consists of more than 12 characters, with a mix of symbols, numbers, and upper & lowercase letters.',
   },
-
+  
 ]
 
 export const getFaqItemById = (faqId) =>
