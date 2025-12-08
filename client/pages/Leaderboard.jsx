@@ -1,13 +1,24 @@
 import { useEffect, useMemo, useState } from 'react'
 import LeaderChart from '../components/leaderboard/LeaderChart.jsx'
 import LeaderboardEntry from '../components/leaderboard/LeaderboardEntry.jsx'
-import { leaderboardEntries } from './leaderboardData.js'
+import useLeaderboard from '../hooks/useLeaderboard.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
+import { deleteLeaderboardEntry } from '../api/leaderboard.js'
 import '../styles/Leaderboard.css'
+import '.././index.css'
 
 function Leaderboard() {
-  const sortedEntries = [...leaderboardEntries]
-    .sort((a, b) => a.time - b.time)
-    .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  const { entries, loading, error, removeEntry } = useLeaderboard()
+  const { user } = useAuth()
+  const isAdmin = !!user && user.is_admin
+
+  const sortedEntries = useMemo(
+    () =>
+      [...entries]
+        .sort((a, b) => a.time - b.time)
+        .map((entry, index) => ({ ...entry, rank: index + 1 })),
+    [entries],
+  )
 
   const getPageSize = () =>
     typeof window !== 'undefined' &&
@@ -18,6 +29,7 @@ function Leaderboard() {
 
   const [pageSize, setPageSize] = useState(getPageSize)
   const [currentPage, setCurrentPage] = useState(1)
+  const [autoPagedToUser, setAutoPagedToUser] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return undefined
@@ -45,14 +57,90 @@ function Leaderboard() {
     setCurrentPage(next)
   }
 
+  const handleDelete = async (entryId) => {
+    if (!isAdmin || !entryId) return
+    try {
+      await deleteLeaderboardEntry(entryId)
+      removeEntry(entryId)
+    } catch (err) {
+      // For now just log; could add UI error later
+      console.error('Failed to delete leaderboard entry', err)
+    }
+  }
+
+  const currentUserEntry = useMemo(() => {
+    if (!user) return null
+    return sortedEntries.find((entry) => entry.username === user.username) || null
+  }, [sortedEntries, user])
+
+  useEffect(() => {
+    if (!user || autoPagedToUser || !sortedEntries.length) return
+    const index = sortedEntries.findIndex((entry) => entry.username === user.username)
+    if (index === -1) return
+    const page = Math.floor(index / pageSize) + 1
+    setCurrentPage(page)
+    setAutoPagedToUser(true)
+  }, [user, sortedEntries, pageSize, autoPagedToUser])
+
+  if (loading) {
+    return (
+      <section className="leaderboard-page">
+        <div className="surface leaderboard-hero">
+          <h1 className="leaderboard-title">Leaderboard</h1>
+          <p className="leaderboard-subtitle">Loading leaderboard…</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error && !sortedEntries.length) {
+    return (
+      <section className="leaderboard-page">
+        <div className="surface leaderboard-hero">
+          <h1 className="leaderboard-title">Leaderboard</h1>
+          <p className="leaderboard-subtitle">
+            We could not load the leaderboard right now.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="leaderboard-page">
       <div className="surface leaderboard-hero">
         <h1 className="leaderboard-title">Leaderboard</h1>
+        {user ? (
+          <p className="leaderboard-greeting">Welcome {user.username}</p>
+        ) : null}
         <p className="leaderboard-subtitle">
           May the best password creator win!
         </p>
       </div>
+
+      {user && (
+        <div className="surface leaderboard-my-stats">
+          {currentUserEntry ? (
+            <>
+              <p className="my-stats-label">Your best run</p>
+              <div className="my-stats-main">
+                <span className="my-stats-time">
+                  {currentUserEntry.time.toFixed(2)}
+                  <span className="my-stats-time-unit">s</span>
+                </span>
+                <span className="my-stats-rank">Rank #{currentUserEntry.rank}</span>
+              </div>
+              {currentUserEntry.date ? (
+                <p className="my-stats-meta">Recorded on {currentUserEntry.date}</p>
+              ) : null}
+            </>
+          ) : (
+            <p className="my-stats-empty">
+              You don&apos;t have a run on the leaderboard yet. Play in the Arena to appear here.
+            </p>
+          )}
+        </div>
+      )}
 
       <LeaderChart entries={currentPageEntries} />
 
@@ -65,7 +153,13 @@ function Leaderboard() {
         </div>
         <div className="table-body">
           {currentPageEntries.map((entry) => (
-            <LeaderboardEntry key={entry.rank} entry={entry} />
+            <LeaderboardEntry
+              key={entry.id ?? entry.rank}
+              entry={entry}
+              isAdmin={isAdmin}
+              isCurrentUser={Boolean(user && entry.username === user.username)}
+              onDelete={() => handleDelete(entry.id)}
+            />
           ))}
         </div>
 

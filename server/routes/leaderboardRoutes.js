@@ -59,7 +59,7 @@ router.get('/top/:limit', async (req, res) => {
 // @access  Public
 router.post('/', async (req, res) => {
   try {
-    const { username, time_seconds } = req.body;
+    const { username, time_seconds, score } = req.body;
 
     // Validation
     if (!username || time_seconds === undefined || time_seconds === null) {
@@ -129,17 +129,12 @@ router.get('/user/:username', async (req, res) => {
       [username]
     );
 
-    if (entries.length === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'No entries found for this user' 
-      });
-    }
-
+    // Return empty array instead of 404 for no entries
     res.json({
       success: true,
       data: entries,
-      count: entries.length
+      count: entries.length,
+      message: entries.length === 0 ? 'No entries found for this user' : undefined
     });
 
   } catch (error) {
@@ -147,6 +142,62 @@ router.get('/user/:username', async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: 'Server error fetching user entries' 
+    });
+  }
+});
+
+// @route   PUT /api/leaderboard/:id
+// @desc    Update username for a leaderboard entry
+// @access  Public (should be admin-protected in production)
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username } = req.body;
+
+    if (!username || typeof username !== 'string' || !username.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'A non-empty username is required'
+      });
+    }
+
+    const trimmed = username.trim();
+
+    // Ensure the entry exists
+    const [existing] = await db.execute(
+      'SELECT id FROM leaderboard WHERE id = ?',
+      [id]
+    );
+
+    if (existing.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Leaderboard entry not found'
+      });
+    }
+
+    // Update username
+    await db.execute(
+      'UPDATE leaderboard SET username = ? WHERE id = ?',
+      [trimmed, id]
+    );
+
+    // Return updated entry
+    const [rows] = await db.execute(
+      'SELECT id, user_rank, username, time_seconds, recorded_date FROM leaderboard WHERE id = ?',
+      [id]
+    );
+
+    res.json({
+      success: true,
+      message: 'Leaderboard entry updated successfully',
+      data: rows[0]
+    });
+  } catch (error) {
+    console.error('Update leaderboard entry error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error updating leaderboard entry'
     });
   }
 });

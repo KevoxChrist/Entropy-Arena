@@ -1,11 +1,41 @@
 //Sign-In & Sign-Up 
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 // import { Star, Github } from 'lucide-react';
 import RegisterSection from "../components/userAccount/Register.jsx" 
 import '../styles/Login.css'
 
 export default function Login(){
-     return (
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError('');
+
+    const result = await login(loginForm.email, loginForm.password);
+    
+    if (result.success) {
+      navigate('/arena');
+    } else {
+      setLoginError(result.message);
+    }
+    setLoginLoading(false);
+  };
+
+  const handleLoginChange = (e) => {
+    setLoginForm({
+      ...loginForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  return (
     <div className="app-container">
       
 
@@ -34,16 +64,33 @@ export default function Login(){
             </div>
 
             {/* Login Form */}
-            <form>
+            {loginError && <div className="error-message">{loginError}</div>}
+            <form onSubmit={handleLoginSubmit}>
               <div className="form-group">
                 <label className="form-label">Email</label>
-                <input type="email" className="form-input" />
+                <input 
+                  type="email" 
+                  name="email"
+                  className="form-input" 
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  required 
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">Password</label>
-                <input type="password" className="form-input" />
+                <input 
+                  type="password" 
+                  name="password"
+                  className="form-input" 
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  required 
+                />
               </div>
-              <button className="btn-submit">Sign In</button>
+              <button type="submit" className="btn-submit" disabled={loginLoading}>
+                {loginLoading ? 'Signing In...' : 'Sign In'}
+              </button>
             </form>
           </section>
 

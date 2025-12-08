@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterSection() {
   const [formData, setFormData] = useState({
@@ -11,27 +13,46 @@ export default function RegisterSection() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage("");
+    setErrors({});
 
-    // simple placeholder logic
-    setTimeout(() => {
-      setLoading(false);
-      setMessage("Account created successfully!");
-    }, 1500);
+    const result = await register(
+      formData.username,
+      formData.email,
+      formData.password,
+      formData.confirmPassword
+    );
+
+    if (result.success) {
+      setMessage("Account created successfully! Redirecting...");
+      setTimeout(() => navigate('/arena'), 2000);
+    } else {
+      setErrors({ general: result.message });
+    }
+    setLoading(false);
   };
 
   return (
     <section>
       <h2 className="section-title">Register</h2>
+      {errors.form && <div className="error-msg">{errors.form}</div>}
       {message && <div className="success-msg">{message}</div>}
+      {errors.general && <div className="error-msg">{errors.general}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">

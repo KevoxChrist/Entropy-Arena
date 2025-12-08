@@ -64,7 +64,8 @@ router.post('/register', async (req, res) => {
       user: {
         id: result.insertId,
         username,
-        email
+        email,
+        is_admin: false
       }
     });
 
@@ -131,7 +132,8 @@ router.post('/login', async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        created_at: user.created_at
+        created_at: user.created_at,
+        is_admin: user.is_admin
       }
     });
 
@@ -152,7 +154,7 @@ router.get('/user/:id', async (req, res) => {
     const { id } = req.params;
 
     const [users] = await db.execute(
-      'SELECT id, username, email, created_at FROM users WHERE id = ?',
+      'SELECT id, username, email, is_admin, created_at FROM users WHERE id = ?',
       [id]
     );
 

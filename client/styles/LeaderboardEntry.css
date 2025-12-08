@@ -23,6 +23,13 @@
   box-shadow: 0 14px 24px rgba(15, 15, 16, 0.16);
 }
 
+.leaderboard-entry--self {
+  border-color: #0f7ae5;
+  box-shadow:
+    0 0 0 2px rgba(15, 122, 229, 0.2),
+    0 12px 24px rgba(15, 15, 16, 0.12);
+}
+
 .leaderboard-entry:hover {
   transform: translateY(-1px);
   border-color: #101010;
@@ -85,6 +92,46 @@
   color: #4b4b50;
   font-size: 0.75rem;
   white-space: nowrap;
+}
+
+.entry-admin-actions {
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.entry-admin-btn {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid #cfd0d6;
+  background: #f7f7f9;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.entry-admin-btn--danger {
+  border-color: #b3261e;
+  color: #b3261e;
+}
+
+.entry-edit-form {
+  margin-bottom: 0.15rem;
+}
+
+.entry-edit-input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #cfd0d6;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+.entry-error {
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  color: #b3261e;
 }
 
 @media (min-width: 768px) {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import '../styles/Header.css'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 const navItems = [
   { path: '/', label: 'Arena', end: true },
@@ -11,8 +12,16 @@ const navItems = [
 
 function Header() {
   const [open, setOpen] = useState(false)
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   const closeMenu = () => setOpen(false)
+
+  const handleLogout = () => {
+    logout()
+    closeMenu()
+    navigate('/')
+  }
 
   return (
     <header className="site-header">
@@ -52,15 +61,25 @@ function Header() {
             </NavLink>
           ))}
 
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `nav-link nav-link--login ${isActive ? 'active' : ''}`
-            }
-            onClick={closeMenu}
-          >
-            Log in
-          </NavLink>
+          {user ? (
+            <button
+              type="button"
+              className="nav-link nav-link--login"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+          ) : (
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `nav-link nav-link--login ${isActive ? 'active' : ''}`
+              }
+              onClick={closeMenu}
+            >
+              Log in
+            </NavLink>
+          )}
         </nav>
       </div>
     </header>

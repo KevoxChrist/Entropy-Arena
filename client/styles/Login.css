@@ -195,3 +195,13 @@
           margin-bottom: 1rem;
           text-align: center;
         }
+
+.error-message {
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          color: #ef4444;
+          padding: 0.75rem;
+          border-radius: 0.5rem;
+          margin-bottom: 1rem;
+          text-align: center;
+        }
