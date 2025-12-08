@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '../../styles/LeaderboardEntry.css'
 import { updateLeaderboardUsername } from '../../api/leaderboard.js'
 
-function LeaderboardEntry({ entry, isAdmin }) {
+function LeaderboardEntry({ entry, isAdmin, isCurrentUser, onDelete }) {
   const { id, rank, username, time, date } = entry
   const isTop = rank === 1
 
@@ -45,7 +45,11 @@ function LeaderboardEntry({ entry, isAdmin }) {
   }
 
   return (
-    <div className={`leaderboard-entry ${isTop ? 'leaderboard-entry--top' : ''}`}>
+    <div
+      className={`leaderboard-entry ${isTop ? 'leaderboard-entry--top' : ''} ${
+        isCurrentUser ? 'leaderboard-entry--self' : ''
+      }`}
+    >
       <div className="entry-rank">{rank}</div>
 
       <div className="entry-user">
@@ -93,13 +97,22 @@ function LeaderboardEntry({ entry, isAdmin }) {
                 </button>
               </>
             ) : (
-              <button
-                type="button"
-                className="entry-admin-btn"
-                onClick={handleEditClick}
-              >
-                Edit
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="entry-admin-btn"
+                  onClick={handleEditClick}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="entry-admin-btn entry-admin-btn--danger"
+                  onClick={onDelete}
+                >
+                  Delete
+                </button>
+              </>
             )}
           </div>
         )}

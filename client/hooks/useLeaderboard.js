@@ -25,6 +25,17 @@ export default function useLeaderboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const dedupeByUser = (list) => {
+    const byUser = new Map()
+    for (const entry of list) {
+      const existing = byUser.get(entry.username)
+      if (!existing || entry.time < existing.time) {
+        byUser.set(entry.username, entry)
+      }
+    }
+    return Array.from(byUser.values())
+  }
+
   useEffect(() => {
     let cancelled = false
 
@@ -38,19 +49,21 @@ export default function useLeaderboard() {
         const json = await response.json()
         const rows = json?.data ?? []
         const mapped = rows.map(mapRowToEntry)
+        const deduped = dedupeByUser(mapped)
 
         if (!cancelled) {
-          setEntries(mapped)
+          setEntries(deduped)
           setError(null)
         }
       } catch (err) {
         console.error('Leaderboard fetch error, falling back to mock data:', err)
         if (!cancelled) {
           setError(err)
-          const fallback = mockEntries.map((entry, index) => ({
+          const fallbackRaw = mockEntries.map((entry, index) => ({
             id: entry.id ?? index + 1,
             ...entry,
           }))
+          const fallback = dedupeByUser(fallbackRaw)
           setEntries(fallback)
         }
       } finally {
@@ -67,5 +80,9 @@ export default function useLeaderboard() {
     }
   }, [])
 
-  return { entries, loading, error }
+  const removeEntry = (id) => {
+    setEntries((previous) => previous.filter((entry) => entry.id !== id))
+  }
+
+  return { entries, loading, error, removeEntry }
 }
