@@ -1,6 +1,6 @@
-import { API_ENDPOINTS } from '../config/api.js';
+import { API_ENDPOINTS } from '../config/api.js'
 
-const API_BASE = API_ENDPOINTS.LEADERBOARD;
+const API_BASE = API_ENDPOINTS.LEADERBOARD
 
 export async function updateLeaderboardUsername(id, username) {
   const response = await fetch(`${API_BASE}/${id}`, {
@@ -19,5 +19,20 @@ export async function updateLeaderboardUsername(id, username) {
   }
 
   return data.data
+}
+
+export async function deleteLeaderboardEntry(id) {
+  const response = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  })
+
+  const data = await response.json()
+
+  if (!response.ok || !data.success) {
+    const message = data?.message || 'Failed to delete leaderboard entry'
+    throw new Error(message)
+  }
+
+  return true
 }
 

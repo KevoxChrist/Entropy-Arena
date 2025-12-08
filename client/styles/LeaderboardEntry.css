@@ -23,6 +23,13 @@
   box-shadow: 0 14px 24px rgba(15, 15, 16, 0.16);
 }
 
+.leaderboard-entry--self {
+  border-color: #0f7ae5;
+  box-shadow:
+    0 0 0 2px rgba(15, 122, 229, 0.2),
+    0 12px 24px rgba(15, 15, 16, 0.12);
+}
+
 .leaderboard-entry:hover {
   transform: translateY(-1px);
   border-color: #101010;
@@ -102,6 +109,11 @@
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.entry-admin-btn--danger {
+  border-color: #b3261e;
+  color: #b3261e;
 }
 
 .entry-edit-form {
