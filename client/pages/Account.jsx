@@ -132,6 +132,7 @@ export default function AccountPage() {
               Personal record
             </p>
           </article>
+          
           {/* Latest Time card */}
           <article className="account-card">
             <h2 className="account-card-title">Latest Time</h2>
@@ -139,7 +140,7 @@ export default function AccountPage() {
             <p className="account-card-secondary">
               Most recent completion
             </p>
-          </article>
+          </article>  
           {/* Games Played card */}
           <article className="account-card">
             <h2 className="account-card-title">Games Played</h2>
