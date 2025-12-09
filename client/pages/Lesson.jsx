@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
-import { getFAQById } from './FAQData.js'
+import { getFaqItemById } from './FAQData.js'
 import '../styles/common.css'
 import './Lesson.css'
 
 function Lesson() {
   const { lessonId } = useParams()
-  const faq = getFAQById(faqId)
+  const faq = getFaqItemById(lessonId)
 
   if (!faq) {
     return (
@@ -13,7 +13,7 @@ function Lesson() {
         <div className="surface lesson-missing">
           <h1>Lesson not found</h1>
           <p className="muted">Try heading back to the lessons list.</p>
-          <Link className="primary-btn" to="/FAQ">
+          <Link className="primary-btn" to="/faq">
             Back to FAQ
           </Link>
         </div>
@@ -24,23 +24,23 @@ function Lesson() {
   return (
     <section className="lesson-page">
       <div className="lesson-topbar">
-        <Link className="ghost-btn" to="/FAQ">
+        <Link className="ghost-btn" to="/faq">
           &lt; Back to FAQ
         </Link>
       </div>
 
       <div className="surface lesson-hero">
-        <p className="lesson-eyebrow">{lesson.moduleTitle}</p>
-        <h1 className="lesson-title">{lesson.title}</h1>
-        <p className="lesson-subtitle">{lesson.shortDescription}</p>
+        <p className="lesson-eyebrow">{faq.moduleTitle}</p>
+        <h1 className="lesson-title">{faq.title}</h1>
+        <p className="lesson-subtitle">{faq.shortDescription}</p>
         <div className="lesson-meta">
-          {lesson.eta ? <span className="lesson-pill">~{lesson.eta}</span> : null}
+          {faq.eta ? <span className="lesson-pill">~{faq.eta}</span> : null}
           <span className="lesson-pill ghost">Guide</span>
         </div>
       </div>
 
       <div className="surface lesson-content">
-        {lesson.content.map((paragraph, index) => (
+        {faq.content?.map((paragraph, index) => (
           <p key={index} className="lesson-paragraph">
             {paragraph}
           </p>
@@ -50,4 +50,4 @@ function Lesson() {
   )
 }
 
-export default FAQ
+export default Lesson

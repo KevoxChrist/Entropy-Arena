@@ -1,4 +1,4 @@
-.login-page {
+.register-page {
   min-height: calc(100vh - 120px);
   padding: 3.5rem 1.5rem 3.5rem;
   display: flex;
@@ -6,11 +6,11 @@
   justify-content: center;
   background: #0a0a0a;
   background-image:
-    radial-gradient(ellipse at 80% 100%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 150%, rgba(34, 197, 94, 0.05) 0%, transparent 60%);
+    radial-gradient(ellipse at 20% 0%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 120%, rgba(34, 197, 94, 0.06) 0%, transparent 60%);
 }
 
-.login-card {
+.register-card {
   width: 100%;
   max-width: 480px;
   background: #050505;
@@ -20,11 +20,11 @@
   padding: 1.75rem 1.75rem 1.9rem;
 }
 
-.login-header {
+.register-header {
   margin-bottom: 1.5rem;
 }
 
-.login-title {
+.register-title {
   margin: 0 0 0.35rem;
   font-size: 1.75rem;
   letter-spacing: 0.06em;
@@ -32,18 +32,27 @@
   color: #e5e7eb;
 }
 
-.login-subtitle {
+.register-subtitle {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
   color: #a3a3a3;
 }
 
-.login-card .form-group {
+/* Override shared form styles only within the register card */
+.register-card .section-title {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: left;
+  color: #e5e7eb;
+}
+
+.register-card .form-group {
   margin-bottom: 1rem;
 }
 
-.login-card .form-label {
+.register-card .form-label {
   display: block;
   margin-bottom: 0.35rem;
   padding-left: 0.15rem;
@@ -51,7 +60,7 @@
   color: #d4d4d4;
 }
 
-.login-card .form-input {
+.register-card .form-input {
   width: 100%;
   background-color: #050505;
   color: #e5e7eb;
@@ -62,14 +71,14 @@
   box-sizing: border-box;
 }
 
-.login-card .form-input:focus {
+.register-card .form-input:focus {
   border-color: #22c55e;
   box-shadow:
     0 0 0 1px rgba(34, 197, 94, 0.45),
     0 0 0 4px rgba(34, 197, 94, 0.15);
 }
 
-.login-card .btn-submit {
+.register-card .btn-submit {
   width: 100%;
   background-color: #22c55e;
   color: #022c22;
@@ -85,45 +94,48 @@
     box-shadow 0.18s ease;
 }
 
-.login-card .btn-submit:hover:not(:disabled) {
+.register-card .btn-submit:hover:not(:disabled) {
   background-color: #16a34a;
   transform: translateY(-1px);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
 }
 
-.login-card .btn-submit:disabled {
+.register-card .btn-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.error-message {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+.register-card .error-msg {
+  color: #f97373;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.register-card .success-msg {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #bbf7d0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.85rem;
+}
+
+.register-card .error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   color: #fecaca;
   padding: 0.75rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   text-align: center;
-  font-size: 0.9rem;
-}
-
-.login-footer-text {
-  margin-top: 1.25rem;
-  font-size: 0.9rem;
-  color: #a3a3a3;
-}
-
-.login-footer-link {
-  color: #22c55e;
-  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
-  .login-page {
+  .register-page {
     padding: 3rem 1.25rem 2.75rem;
   }
 
-  .login-card {
+  .register-card {
     padding: 1.5rem 1.5rem 1.75rem;
   }
 }

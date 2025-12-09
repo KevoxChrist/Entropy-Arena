@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import './App.css'
 import { AuthProvider } from './contexts/AuthContext'
+import Home from './pages/Home'
 import Arena from './pages/Arena'
 import Login from './pages/LogIn'
+import Register from './pages/Register'
 import FAQ from './pages/FAQ'
 import AccountPage from './pages/Account'
 // import NotFound from './pages/NotFound' 
@@ -16,13 +18,15 @@ function App() {
       <BrowserRouter>
       <Header/>
       <Routes>
-        <Route path="/Login" element= {<Login/>}/>
-        <Route path="/FAQ" element= {<FAQ/>}/>
+        <Route path="/" element= {<Home/>}/>
+        <Route path="/arena" element= {<Arena/>}/>
+        <Route path="/login" element= {<Login/>}/>
+        <Route path="/register" element= {<Register/>}/>
+        <Route path="/faq" element= {<FAQ/>}/>
         {/* <Route path="/FAQ/:lessonId" element={<FAQ />} /> */}
-        <Route path="/" element= {<Arena/>}/>
         {/* <Route path="/404" element= {<NotFound/>}/> */}
-        <Route path="/Leaderboard" element= {<Leaderboard/>}/>
-        <Route path="/Account" element={<AccountPage />} />
+        <Route path="/leaderboard" element= {<Leaderboard/>}/>
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
       <Footer/>
       </BrowserRouter>
