@@ -5,7 +5,7 @@ function Home() {
   return (
     <main className="home-page">
       <div className="home-hero">
-        <p className="home-eyebrow">Turn ‘Password123’ into ‘Nice Try, Hacker</p>
+        <p className="home-eyebrow">Turn ‘Password123’ into ‘Nice Try, Hacker'</p>
         <h1 className="home-title">
           Entropy <span className="home-title-highlight">Arena</span>
         </h1>
