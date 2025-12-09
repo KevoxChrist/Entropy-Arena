@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import InfoModal from '../components/InfoModal';
 import InfoModalContent from '../components/InfoModalContent';
+import { API_ENDPOINTS } from '../config/api';
 
 function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     const { user } = useAuth();
@@ -131,7 +132,7 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
             if (!user || savedToLeaderboard) return;
 
             try {
-                const response = await fetch('/api/leaderboard', {
+                const response = await fetch(API_ENDPOINTS.LEADERBOARD, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
