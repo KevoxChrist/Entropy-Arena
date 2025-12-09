@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import '../styles/Header.css'
 import { useAuth } from '../contexts/AuthContext.jsx'
+import entropyLogo from '../assets/Entropy_Logo2.svg'
 
 const navItems = [
-  { path: '/', label: 'Arena', end: true },
-  { path: '/FAQ', label: 'FAQ' },
+  { path: '/', label: 'Home', end: true },
+  { path: '/arena', label: 'Arena' },
+  { path: '/faq', label: 'FAQ' },
   { path: '/leaderboard', label: 'Leaderboard' },
   { path: '/account', label: 'Account' },
 ]
@@ -27,13 +29,11 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <NavLink to="/" className="brand" onClick={closeMenu}>
-          <div className="logo-mark" aria-hidden="true">
-            <div className="logo-knot" />
-          </div>
-          <div className="brand-label">
-            <span className="brand-title">Entropy Arena</span>
-            <span className="brand-subtitle">Build safer passwords</span>
-          </div>
+          <img
+            src={entropyLogo}
+            alt="Entropy Arena"
+            className="brand-logo"
+          />
         </NavLink>
 
         <button
@@ -70,15 +70,26 @@ function Header() {
               Log out
             </button>
           ) : (
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                `nav-link nav-link--login ${isActive ? 'active' : ''}`
-              }
-              onClick={closeMenu}
-            >
-              Log in
-            </NavLink>
+            <>
+              <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                  `nav-link nav-link--login ${isActive ? 'active' : ''}`
+                }
+                onClick={closeMenu}
+              >
+                Register
+              </NavLink>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `nav-link nav-link--login ${isActive ? 'active' : ''}`
+                }
+                onClick={closeMenu}
+              >
+                Log in
+              </NavLink>
+            </>
           )}
         </nav>
       </div>
