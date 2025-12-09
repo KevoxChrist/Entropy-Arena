@@ -2,12 +2,26 @@
 import '../styles/Results.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
-import { API_ENDPOINTS } from '../config/api.js';
+import InfoModal from '../components/InfoModal';
+import InfoModalContent from '../components/InfoModalContent';
 
-function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRestart }) {
+function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     const { user } = useAuth();
     const [savedToLeaderboard, setSavedToLeaderboard] = useState(false);
     const [saveError, setSaveError] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({ title: '', content: null });
+
+    const openModal = (type) => {
+        const content = InfoModalContent[type] || { title: 'Information', content: <p>No information available.</p> };
+        setModalContent(content);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     const getStrengthLabel = (score) => {
         const labels = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Centuries'];
         return labels[score];
@@ -87,7 +101,8 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
     const strengthLabel = getStrengthLabel(passwordData.score);
     const strengthColor = getStrengthColor(passwordData.score);
 
-    // Time calculations - timeTaken is passed directly from Arena
+    // New calculations
+    const timeTaken = 30 - timeRemaining;
     const passwordLength = passwordData.password?.length || 0;
     const wpm = Math.round((passwordLength / 5) / (timeTaken / 60));
 
@@ -99,7 +114,7 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
     // TASKS:
     // 1. Configure how the scoring is calulated. Include penalties
     const baseScore = Math.round(passwordData.guesses_log10 * 100);
-    const timeBonus = Math.round((30 - timeTaken) * 50); // Bonus based on time remaining
+    const timeBonus = timeRemaining * 50;
     const accuracyBonus = Math.round(parseFloat(accuracy) * 20);
     const totalScore = Math.round(baseScore + timeBonus + accuracyBonus);
     const xp = Math.round(totalScore * 0.15);
@@ -110,15 +125,13 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
 
     const aiFeedback = generateAIFeedback(parseFloat(accuracy), wpm, entropyScore, passwordLength);
 
-    // Save to leaderboard when component mounts (only if user is logged in)
+    // Save to leaderboard when component mounts (only if user is logged in and not already saved)
     useEffect(() => {
-        let isCancelled = false;
-
         const saveToLeaderboard = async () => {
-            if (!user) return;
+            if (!user || savedToLeaderboard) return;
 
             try {
-                const response = await fetch(API_ENDPOINTS.LEADERBOARD, {
+                const response = await fetch('/api/leaderboard', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,29 +144,20 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
                 });
 
                 const data = await response.json();
-
-                if (!isCancelled) {
-                    if (data.success) {
-                        setSavedToLeaderboard(true);
-                    } else {
-                        setSaveError(data.message || 'Failed to save to leaderboard');
-                    }
+                
+                if (data.success) {
+                    setSavedToLeaderboard(true);
+                } else {
+                    setSaveError(data.message || 'Failed to save to leaderboard');
                 }
             } catch (error) {
                 console.error('Error saving to leaderboard:', error);
-                if (!isCancelled) {
-                    setSaveError('Network error while saving to leaderboard');
-                }
+                setSaveError('Network error while saving to leaderboard');
             }
         };
 
         saveToLeaderboard();
-
-        return () => {
-            isCancelled = true;
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user, timeTaken, totalScore, savedToLeaderboard]);
 
     return (
         <main className="results">
@@ -174,7 +178,7 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
                         <div className="stats-row">
                             <article className="stat-block">
                                 <span className="label">time</span>
-                                <data className="value-large" value={timeTaken.toFixed(2)}>{timeTaken.toFixed(2)}s</data>
+                                <data className="value-large" value={timeTaken.toFixed(1)}>{timeTaken.toFixed(1)}s</data>
                                 <span className="value-sub">{wpm} wpm</span>
                             </article>
                             <article className="stat-block">
@@ -197,7 +201,16 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
 
                         <section className="progress-section" aria-label="Strength Level">
                             <header className="progress-header">
-                                <span className="progress-label">strength level</span>
+                                <span className="progress-label">
+                                    strength level
+                                    <button
+                                        className="info-button"
+                                        onClick={() => openModal('strengthLevel')}
+                                        aria-label="Information about strength level"
+                                    >
+                                        ?
+                                    </button>
+                                </span>
                                 <span className="progress-value" style={{ color: strengthColor }}>
                                     {strengthLabel}
                                 </span>
@@ -215,7 +228,16 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
 
                         <section className="progress-section" aria-label="Entropy Score">
                             <header className="progress-header">
-                                <span className="progress-label">entropy score</span>
+                                <span className="progress-label">
+                                    entropy score
+                                    <button
+                                        className="info-button"
+                                        onClick={() => openModal('entropyScore')}
+                                        aria-label="Information about entropy score"
+                                    >
+                                        ?
+                                    </button>
+                                </span>
                                 <span className="progress-value">{entropyScore}</span>
                             </header>
                             <div className="progress-bar" role="progressbar" aria-valuenow={Math.min((entropyScore / 100) * 100, 100)} aria-valuemin="0" aria-valuemax="100">
@@ -233,15 +255,63 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
                             <h2 id="crack-heading" className="crack-label">time to crack</h2>
                             <div className="crack-grid">
                                 <article>
-                                    <h3 className="crack-type">dictionary attack</h3>
+                                    <h3 className="crack-type">
+                                        dictionary attack
+                                        <button
+                                            className="info-button"
+                                            onClick={() => openModal('dictionaryAttack')}
+                                            aria-label="Information about dictionary attack"
+                                        >
+                                            ?
+                                        </button>
+                                    </h3>
                                     <p className="crack-time">
                                         {passwordData.crack_times_display.offline_fast_hashing_1e10_per_second}
                                     </p>
                                 </article>
                                 <article>
-                                    <h3 className="crack-type">brute force attack</h3>
+                                    <h3 className="crack-type">
+                                        brute force attack
+                                        <button
+                                            className="info-button"
+                                            onClick={() => openModal('bruteForceAttack')}
+                                            aria-label="Information about brute force attack"
+                                        >
+                                            ?
+                                        </button>
+                                    </h3>
                                     <p className="crack-time">
                                         {passwordData.crack_times_display.offline_slow_hashing_1e4_per_second}
+                                    </p>
+                                </article>
+                                <article>
+                                    <h3 className="crack-type">
+                                        l33t speak attack
+                                        <button
+                                            className="info-button"
+                                            onClick={() => openModal('leetSpeakAttack')}
+                                            aria-label="Information about l33t speak attack"
+                                        >
+                                            ?
+                                        </button>
+                                    </h3>
+                                    <p className="crack-time">
+                                        {passwordData.crack_times_display.online_throttling_100_per_hour || 'less than a second'}
+                                    </p>
+                                </article>
+                                <article>
+                                    <h3 className="crack-type">
+                                        sequential attacks
+                                        <button
+                                            className="info-button"
+                                            onClick={() => openModal('sequentialAttacks')}
+                                            aria-label="Information about sequential attacks"
+                                        >
+                                            ?
+                                        </button>
+                                    </h3>
+                                    <p className="crack-time">
+                                        {passwordData.crack_times_display.online_no_throttling_10_per_second || 'less than a second'}
                                     </p>
                                 </article>
                             </div>
@@ -258,7 +328,16 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
                     </section>
 
                     <aside className="ai-feedback" aria-labelledby="ai-heading">
-                        <h2 id="ai-heading" className="ai-label">ai feedback</h2>
+                        <h2 id="ai-heading" className="ai-label">
+                            ai feedback
+                            <button
+                                className="info-button"
+                                onClick={() => openModal('aiFeedback')}
+                                aria-label="Information about AI feedback"
+                            >
+                                ?
+                            </button>
+                        </h2>
                         <p className="ai-summary">{aiFeedback.message}</p>
 
                         <section className="feedback-section">
@@ -287,6 +366,13 @@ function Results({ password1Data, password2Data, timeRemaining: timeTaken, onRes
                     </aside>
                 </section>
             </article>
+
+            <InfoModal
+                isOpen={modalOpen}
+                onClose={closeModal}
+                title={modalContent.title}
+                content={modalContent.content}
+            />
         </main>
     );
 }

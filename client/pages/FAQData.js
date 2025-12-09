@@ -21,6 +21,20 @@ export const faqItems = [
       'No, we use algorithms built from our AI prompt engineer.',
   },
   {
+    id: 'dictionary',
+    title: 'What is a Dictionary Attack?',
+    moduleTitle: moduleInfo.title,
+    shortDescription:
+      `A dictionary attack is a type of cybersecurity attack that uses a list of common words and phrases to guess a user's password for a system.`,
+  },
+  {
+    id: 'bruteforce',
+    title: `What is a Brute Force Attack?`,
+    moduleTitle: moduleInfo.title,
+    shortDescription:
+      'A brute force attack is a cyberattack where attackers systematically try every possible combination of passwords or encryption keys to gain unauthorized access to a system, account, or data.',
+  },
+  {
     id: 'shannonEntropy',
     title: 'What is Shannon Entropy?',
     moduleTitle: moduleInfo.title,

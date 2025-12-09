@@ -2,8 +2,8 @@
   font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #101010;
-  background-color: #e8e8ec;
+  color: #e5e7eb;
+  background-color: #050509;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,7 +17,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #e8e8ec;
+  background-color: #050509;
 }
 
 a {

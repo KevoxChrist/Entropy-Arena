@@ -166,7 +166,7 @@ function Arena(){
                 </button>
                 {!user && (
                     <div className="login-prompt">
-                         <a href="/Login">Log in</a> to save your score to the leaderboard
+                         <a href="/login">Log in</a> to save your score to the leaderboard
                     </div>
                 )}
             </header>

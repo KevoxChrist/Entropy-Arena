@@ -114,6 +114,9 @@ body {
     font-size: 18px;
     color: #5a5a5a;
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .progress-value {
@@ -159,8 +162,8 @@ body {
 
 .crack-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
 }
 
 .crack-type {
@@ -168,11 +171,39 @@ body {
     color: #5a5a5a;
     margin-bottom: 6px;
     padding-bottom: .7rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .crack-time {
     font-size: 22px;
     font-weight: 500;
+}
+
+/* Info Button */
+.info-button {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #3a3a3a;
+    background: transparent;
+    color: #5a5a5a;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.info-button:hover {
+    background: #1f1f1f;
+    border-color: #4a4a4a;
+    color: #8a8a8a;
 }
 
 /* Buttons */
@@ -221,6 +252,9 @@ body {
     font-size: 14px;
     color: #5a5a5a;
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .ai-summary {
@@ -301,6 +335,7 @@ body {
     }
 
     .crack-grid {
+        grid-template-columns: 1fr;
         gap: 40px;
     }
 }
