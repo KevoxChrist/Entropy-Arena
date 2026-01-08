@@ -12,6 +12,8 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     const [saveError, setSaveError] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', content: null });
+    const [aiFeedback, setAiFeedback] = useState(null);
+    const [aiFeedbackLoading, setAiFeedbackLoading] = useState(true);
 
     const openModal = (type) => {
         const content = InfoModalContent[type] || { title: 'Information', content: <p>No information available.</p> };
@@ -54,43 +56,6 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
         return 'Bronze';
     };
 
-    const generateAIFeedback = (accuracy, wpm, entropyScore, passwordLength) => {
-        const strengths = [];
-        const improvements = [];
-
-        // Analyze performance for strengths
-        if (accuracy >= 90) {
-            strengths.push('Strong accuracy on common words');
-        }
-        if (wpm >= 70) {
-            strengths.push('Good recovery from errors');
-        }
-        if (entropyScore >= 80) {
-            strengths.push('Consistent pace throughout');
-        }
-
-        // Analyze for improvements
-        if (accuracy < 95) {
-            improvements.push('Practice with punctuation marks');
-        }
-        if (passwordLength < 15) {
-            improvements.push('Work on less common key combinations');
-        }
-
-        // Generate summary message
-        let message = '';
-        if (accuracy >= 95 && wpm >= 70) {
-            message = 'Excellent performance! Your typing rhythm shows consistency and strong muscle memory.';
-        } else if (accuracy >= 85) {
-            message = 'Great job! Your accuracy is strong and you\'re building good habits.';
-        } else if (accuracy >= 75) {
-            message = 'Good effort! Keep practicing to improve your consistency.';
-        } else {
-            message = 'Keep practicing! Focus on accuracy before speed.';
-        }
-
-        return { message, strengths, improvements };
-    };
 
     // Use password1Data as the main data
     const passwordData = password1Data;
@@ -124,7 +89,32 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
     const rank = getRank(totalScore);
 
 
-    const aiFeedback = generateAIFeedback(parseFloat(accuracy), wpm, entropyScore, passwordLength);
+    // Fetch AI feedback when component mounts
+    useEffect(() => {
+        const fetchAiFeedback = async () => {
+            try {
+                const response = await fetch(API_ENDPOINTS.PASSWORD_ANALYZE, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ passwordData }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    setAiFeedback(data.feedback);
+                }
+            } catch (error) {
+                console.error('Error fetching AI feedback:', error);
+            } finally {
+                setAiFeedbackLoading(false);
+            }
+        };
+
+        fetchAiFeedback();
+    }, [passwordData]);
 
     // Save to leaderboard when component mounts (only if user is logged in and not already saved)
     useEffect(() => {
@@ -339,31 +329,58 @@ function Results({ password1Data, password2Data, timeRemaining, onRestart }) {
                                 ?
                             </button>
                         </h2>
-                        <p className="ai-summary">{aiFeedback.message}</p>
+                        {aiFeedbackLoading ? (
+                            <p className="ai-summary">Analyzing your password...</p>
+                        ) : aiFeedback ? (
+                            <>
+                                <p className="ai-summary">{aiFeedback.overall_assessment}</p>
 
-                        <section className="feedback-section">
-                            <h3 className="feedback-title">strengths</h3>
-                            <ul>
-                                {aiFeedback.strengths.map((strength, index) => (
-                                    <li className="feedback-item" key={index}>
-                                        <span className="feedback-arrow">→</span>
-                                        <span>{strength}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
+                                {aiFeedback.vulnerabilities_explained && aiFeedback.vulnerabilities_explained.length > 0 && (
+                                    <section className="feedback-section">
+                                        <h3 className="feedback-title">vulnerabilities</h3>
+                                        <ul>
+                                            {aiFeedback.vulnerabilities_explained.map((vuln, index) => (
+                                                <li key={index} className="feedback-item-detailed">
+                                                    <div className="feedback-issue">{vuln.issue}</div>
+                                                    <div className="feedback-explanation">{vuln.why_it_matters}</div>
+                                                    <div className="feedback-impact">{vuln.impact}</div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )}
 
-                        <section className="feedback-section">
-                            <h3 className="feedback-title">areas to improve</h3>
-                            <ul>
-                                {aiFeedback.improvements.map((improvement, index) => (
-                                    <li className="feedback-item" key={index}>
-                                        <span className="feedback-arrow">→</span>
-                                        <span>{improvement}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
+                                {aiFeedback.strengths_explained && aiFeedback.strengths_explained.length > 0 && (
+                                    <section className="feedback-section">
+                                        <h3 className="feedback-title">strengths</h3>
+                                        <ul>
+                                            {aiFeedback.strengths_explained.map((strength, index) => (
+                                                <li key={index} className="feedback-item-detailed">
+                                                    <div className="feedback-strength">{strength.strength}</div>
+                                                    <div className="feedback-benefit">{strength.benefit}</div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )}
+
+                                {aiFeedback.improvement_tips && aiFeedback.improvement_tips.length > 0 && (
+                                    <section className="feedback-section">
+                                        <h3 className="feedback-title">improvement tips</h3>
+                                        <ul>
+                                            {aiFeedback.improvement_tips.map((tip, index) => (
+                                                <li key={index} className="feedback-item">
+                                                    <span className="feedback-arrow">→</span>
+                                                    <span>{tip}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )}
+                            </>
+                        ) : (
+                            <p className="ai-summary">Unable to generate AI feedback.</p>
+                        )}
                     </aside>
                 </section>
             </article>

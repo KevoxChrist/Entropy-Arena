@@ -5,18 +5,24 @@ import { API_ENDPOINTS } from '../config/api.js'
 const API_URL = API_ENDPOINTS.LEADERBOARD
 
 function mapRowToEntry(row) {
+  let formattedDate = ''
+  if (row.recorded_date) {
+    const fullDate = new Date(row.recorded_date).toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    })
+    // Extract last 2 digits of year: "01/08/2026" -> "01/08/26"
+    const twoDigitYear = fullDate.slice(-2)
+    formattedDate = fullDate.slice(0, -4) + twoDigitYear
+  }
+
   return {
     id: row.id,
     rank: row.user_rank,
     username: row.username,
     time: Number(row.time_seconds),
-    date: row.recorded_date
-      ? new Date(row.recorded_date).toLocaleDateString('en-US', {
-          month: '2-digit',
-          day: '2-digit',
-          year: '2-digit',
-        })
-      : '',
+    date: formattedDate,
   }
 }
 

@@ -1,7 +1,11 @@
-require("dotenv").config({ path: "./.env" });
-const Anthropic = require("@anthropic-ai/sdk");
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env' });
+
+import Anthropic from '@anthropic-ai/sdk';
+
 const client = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
+    apiKey: process.env.API_KEY,
 });
 
 async function getAiFeedback(aiPayload) {
@@ -34,6 +38,7 @@ Respond with ONLY a JSON object (no markdown, no code blocks) in this exact form
   "strengths_explained": [
     {
       "strength": "what they did well",
+      "benefit": "why this helps security"
     }
   ],
   "improvement_tips": [
@@ -45,7 +50,7 @@ Respond with ONLY a JSON object (no markdown, no code blocks) in this exact form
             },
         ],
     });
-    
+
     let responseText = message.content[0].text;
 
     // Strip markdown code blocks if present
@@ -55,4 +60,4 @@ Respond with ONLY a JSON object (no markdown, no code blocks) in this exact form
     return data;
 }
 
-module.exports = { getAiFeedback };
+export { getAiFeedback };

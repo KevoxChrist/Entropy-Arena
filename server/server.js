@@ -37,11 +37,13 @@ const PORT = 5000;
 // Import routes
 import userRoutes from './routes/userRoutes.js';
 import leaderboardRoutes from './routes/leaderboardRoutes.js';
+import passwordFeedbackRoutes from './routes/passwordFeedbackRoutes.js';
 
 //----------------------ROUTES--------------------------
 // API Routes
 app.use('/api/auth', userRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/password', passwordFeedbackRoutes);
 
 // Basic test route
 app.get('/api/test', (req, res) => {

@@ -297,6 +297,38 @@ body {
     flex-shrink: 0;
 }
 
+/* Detailed feedback items */
+.feedback-item-detailed {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: rgba(31, 31, 31, 0.4);
+    border-radius: 8px;
+    border-left: 2px solid #3a3a3a;
+}
+
+.feedback-issue,
+.feedback-strength {
+    font-size: 15px;
+    font-weight: 500;
+    color: #e5e5e5;
+    margin-bottom: 8px;
+}
+
+.feedback-explanation,
+.feedback-benefit {
+    font-size: 14px;
+    color: #9a9a9a;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.feedback-impact {
+    font-size: 13px;
+    color: #7a7a7a;
+    font-style: italic;
+    line-height: 1.5;
+}
+
 /* Semantic element resets to match original div styling */
 .crack-label,
 .ai-label,
