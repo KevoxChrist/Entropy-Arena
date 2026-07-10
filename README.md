@@ -31,7 +31,7 @@ A gamified cybersecurity education platform that teaches users how to build stro
 
 ## Overview
 
-Most people do not understand why their passwords are weak until it is too late. Entropy Arena makes password security tangible. Users submit a password, watch it get tested against four real attack types, receive personalized AI feedback from Claude, and compete on a live leaderboard within a 30-second challenge window.
+Most people do not understand why their passwords are weak until it is too late. Entropy Arena makes password security tangible — users submit a password, watch it get tested against four real attack types, receive personalized AI feedback from Claude, and compete on a live leaderboard within a 30-second challenge window.
 
 Built by a four-person team during the Road to Hire coding apprenticeship program.
 
@@ -68,9 +68,13 @@ Built by a four-person team during the Road to Hire coding apprenticeship progra
 
 ### Attack Results — Score Breakdown
 
-Each completed challenge shows how long the password would take to crack under each attack type, alongside a strength level, entropy score, and AI-generated recommendations.
+Each completed challenge shows how long the password would take to crack under each attack type, alongside a strength level, entropy score, and AI-generated feedback with specific strengths and areas to improve.
 
-![Entropy Arena Attack Results](./assets/entropy_attacks_gif.gif)
+![Entropy Arena Results Page](./assets/Entropy_results.png)
+
+The info modal on each attack type explains how that attack works and what makes a password resistant to it.
+
+![Entropy Arena Attack Modals](./assets/entropy_attacks_gif.gif)
 
 ### Leaderboard
 
