@@ -7,7 +7,7 @@ A gamified cybersecurity education platform that teaches users how to build stro
 
 ---
 
-![Entropy Arena Homepage](./assets/Entropy_homepage.png)
+![Entropy Arena Homepage](./assets/Entropy_hompage.png)
 
 ---
 
